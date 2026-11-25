@@ -1,24 +1,19 @@
-# Template Instructions
+# Ansible Collection - pfsensible.freeradius
 
-This is a template repository.  Use it to create a new collection in the pfsenible namespace.
-Search files for COLLECTION and PACKAGE and replace as appropropriate.  Remove this section when done.
-
-# Ansible Collection - pfsensible.COLLECTION
-
-This is a set of modules to allow you to configure PACKAGE on pfSense firewalls with ansible.
+This is a set of modules to allow you to configure FreeRADIUS on pfSense firewalls with ansible.
 
 ## Installation using ansible galaxy
 
 To install:
 
 ```
-ansible-galaxy collection install pfsensible.COLLECTION
+ansible-galaxy collection install pfsensible.freeradius
 ```
 
 Optionally, you can specify the path of the collection installation with the `-p` option.
 
 ```
-ansible-galaxy collection install pfsensible.COLLECTION -p ./collections
+ansible-galaxy collection install pfsensible.freeradius -p ./collections
 ```
 
 Additionally, you can set the `collections_paths` option in your `ansible.cfg` file to automatically designate install locations.
@@ -48,19 +43,19 @@ Modules must run as root in order to make changes to the system.  By default pfS
 ```
 and then configure sudo so that your user has permission to use sudo.
 
-This package assumes that the PACKAGE pfSense package has been installed.
+This package assumes that the FreeRADIUS pfSense package has been installed.
 ```
-  - name: Install PACKAGE
+  - name: Install FreeRADIUS
     package:
       name:
-        - pfSense-pkg-PACKAGE
+        - pfSense-pkg-freeradius3
       state: present
 ```
 
 ## Modules
 The following modules are currently available:
 
-* [pfsense_COLLECTION](plugins/modules/pfsense_MODULE.py) for configuring PACKAGE
+* [pfsense_freeradius](plugins/modules/pfsense_MODULE.py) for configuring FreeRADIUS
 
 ## License
 

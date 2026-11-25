@@ -1,5 +1,5 @@
 namespace: pfsensible
-name: COLLECTION
+name: freeradius
 
 # The version of the collection. Must be compatible with semantic versioning
 version: 0.1.0
@@ -22,7 +22,7 @@ license:
 
 # A list of tags you want to associate with the collection for indexing/searching. A tag name has the same character
 # requirements as 'namespace' and 'name'
-tags: [pfsense, PACKAGE]
+tags: [pfsense, freeradius]
 
 # Collections that this collection requires to be installed for it to be usable. The key of the dict is the
 # collection label 'namespace.name'. The value is a version range
@@ -31,16 +31,16 @@ tags: [pfsense, PACKAGE]
 dependencies: { pfsensible.core: '>=0.7.2' }
 
 # The URL of the originating SCM repository
-repository: https://github.com/pfsensible/COLLECTION
+repository: https://github.com/pfsensible/freeradius
 
 # The URL to any online docs
-documentation: https://github.com/pfsensible/COLLECTION/wiki
+documentation: https://github.com/pfsensible/freeradius/wiki
 
 # The URL to the homepage of the collection/project
-homepage: https://github.com/pfsensible/COLLECTION
+homepage: https://github.com/pfsensible/freeradius
 
 # The URL to the collection issue tracker
-issues: https://github.com/pfsensible/COLLECTION/issues
+issues: https://github.com/pfsensible/freeradius/issues
 
 # A list of file glob-like patterns used to filter any files or directories that should not be included in the build
 # artifact. A pattern is matched from the relative path of the file or directory of the collection directory. This

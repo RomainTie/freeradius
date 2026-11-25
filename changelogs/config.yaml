@@ -31,7 +31,7 @@ sections:
   - Bugfixes
 - - known_issues
   - Known Issues
-title: Pfsensible.COLLECTION
+title: Pfsensible.freeradius
 trivial_section_name: trivial
 use_fqcn: true
 vcs: auto

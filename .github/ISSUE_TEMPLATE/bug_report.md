@@ -24,7 +24,7 @@ Please paste the ansible output run with `-vv`:
 ```
 
 **Environment**
-- What version of pfsensible.COLLECTION?
+- What version of pfsensible.freeradius?
 - What version of pfsensible.core?
 - What version of ansible?
 - What version of pfSense?
