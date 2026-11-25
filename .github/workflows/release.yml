@@ -1,0 +1,85 @@
+name: Release Ansible Collection
+
+on:
+  release:
+    types: [published]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: write
+
+jobs:
+  build-and-publish:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v6
+        with:
+          ref: ${{ github.event_name == 'release' && github.event.release.target_commitish || github.ref }}
+          fetch-depth: 0
+
+      - name: Set up Python
+        uses: actions/setup-python@v7
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: |
+          python -m pip install --upgrade pip
+          pip install ansible-core antsibull-changelog
+
+      - name: Determine version
+        id: version
+        run: |
+          if [ "${{ github.event_name }}" == "release" ]; then
+            echo "val=${GITHUB_REF_NAME#v}" >> $GITHUB_OUTPUT
+          else
+            echo "val=0.0.1-pr" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Update version in galaxy.yml
+        run: |
+          sed -i "s/^version:.*/version: ${{ steps.version.outputs.val }}/" galaxy.yml
+
+      - name: Lint and generate changelog
+        run: |
+          antsibull-changelog lint
+          antsibull-changelog release --version "${{ steps.version.outputs.val }}"
+
+      - name: Commit changelog and version bump
+        if: github.event_name == 'release'
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@://github.com"
+          git add galaxy.yml CHANGELOG.rst changelogs/
+          git commit -m "Release ${GITHUB_REF_NAME}"
+          git push origin HEAD:${{ github.event.release.target_commitish }}
+          git tag -f "${GITHUB_REF_NAME}"
+          git push -f origin "${GITHUB_REF_NAME}"
+
+      - name: Build collection artifact
+        run: |
+          ansible-galaxy collection build --output-path dist/
+
+      - name: Upload PR build artifact
+        if: github.event_name == 'pull_request'
+        uses: actions/upload-artifact@v7
+        with:
+          name: pr-collection-build
+          path: |
+            dist/*.tar.gz
+            CHANGELOG.rst
+
+      - name: Upload tarball to GitHub Release
+        if: github.event_name == 'release'
+        uses: softprops/action-gh-release@v3
+        with:
+          files: dist/*.tar.gz
+
+      - name: Publish collection to Ansible Galaxy
+        if: github.event_name == 'release'
+        env:
+          ANSIBLE_GALAXY_TOKEN: ${{ secrets.ANSIBLE_GALAXY_TOKEN }}
+        run: |
+          ansible-galaxy collection publish dist/*.tar.gz --token "$ANSIBLE_GALAXY_TOKEN"
